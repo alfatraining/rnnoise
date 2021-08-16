@@ -3,6 +3,12 @@ include(CheckLibraryExists)
 
 project(rnnoise LANGUAGES C)
 
+option(RNNOISE_COMPILE_OPUS "Compile opus library functions (turning this off implies libopus as a dependency)" ON)
+
+if(RNNOISE_COMPILE_OPUS)
+	add_definitions(-DCOMPILE_OPUS)
+endif()
+
 if(MSVC)
 	option(MSVC_LINK_STATIC_RUNTIME "Use static linking of msvc runtime" OFF)
 endif()
@@ -18,8 +24,6 @@ if(MSVC AND MSVC_LINK_STATIC_RUNTIME)
 		endif(${flag_var} MATCHES "/MD")
 	endforeach(flag_var)
 endif()
-
-add_definitions(-DCOMPILE_OPUS)
 
 # Ignore CRT warnings
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
