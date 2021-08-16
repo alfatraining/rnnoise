@@ -29,6 +29,8 @@
 #include "config.h"
 #endif
 
+#ifdef COMPILE_OPUS
+
 #include "celt_lpc.h"
 #include "arch.h"
 #include "common.h"
@@ -280,3 +282,5 @@ int _celt_autocorr(
    free(xx);
    return shift;
 }
+
+#endif

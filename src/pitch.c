@@ -35,6 +35,8 @@
 #include "config.h"
 #endif
 
+#ifdef COMPILE_OPUS
+
 #include "pitch.h"
 #include "common.h"
 //#include "modes.h"
@@ -530,3 +532,5 @@ opus_val16 remove_doubling(opus_val16 *x, int maxperiod, int minperiod,
    free(yy_lookup);
    return pg;
 }
+
+#endif
