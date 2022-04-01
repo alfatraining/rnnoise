@@ -35,8 +35,6 @@
 #include "config.h"
 #endif
 
-#ifdef COMPILE_OPUS
-
 #include "pitch.h"
 #include "common.h"
 //#include "modes.h"
@@ -147,7 +145,7 @@ static void celt_fir5(const opus_val16 *x,
 }
 
 
-void pitch_downsample(celt_sig *x[], opus_val16 *x_lp,
+void pitch_downsample_rn(celt_sig *x[], opus_val16 *x_lp,
       int len, int C)
 {
    int i;
@@ -182,7 +180,7 @@ void pitch_downsample(celt_sig *x[], opus_val16 *x_lp,
       x_lp[0] += SHR32(HALF32(HALF32(x[1][1])+x[1][0]), shift);
    }
 
-   _celt_autocorr(x_lp, ac, NULL, 0,
+   _celt_autocorr_rn(x_lp, ac, NULL, 0,
                   4, len>>1);
 
    /* Noise floor -40 dB */
@@ -202,7 +200,7 @@ void pitch_downsample(celt_sig *x[], opus_val16 *x_lp,
 #endif
    }
 
-   _celt_lpc(lpc, ac, 4);
+   _celt_lpc_rn(lpc, ac, 4);
    for (i=0;i<4;i++)
    {
       tmp = MULT16_16_Q15(QCONST16(.9f,15), tmp);
@@ -282,7 +280,7 @@ void celt_pitch_xcorr(const opus_val16 *_x, const opus_val16 *_y,
 #endif
 }
 
-void pitch_search(const opus_val16 *x_lp, opus_val16 *y,
+void pitch_search_rn(const opus_val16 *x_lp, opus_val16 *y,
                   int len, int max_pitch, int *pitch)
 {
    int i, j;
@@ -426,7 +424,7 @@ static opus_val16 compute_pitch_gain(opus_val32 xy, opus_val32 xx, opus_val32 yy
 #endif
 
 static const int second_check[16] = {0, 0, 3, 2, 3, 2, 5, 2, 3, 2, 3, 2, 5, 2, 3, 2};
-opus_val16 remove_doubling(opus_val16 *x, int maxperiod, int minperiod,
+opus_val16 remove_doubling_rn(opus_val16 *x, int maxperiod, int minperiod,
       int N, int *T0_, int prev_period, opus_val16 prev_gain)
 {
    int k, i, T, T0;
@@ -532,5 +530,3 @@ opus_val16 remove_doubling(opus_val16 *x, int maxperiod, int minperiod,
    free(yy_lookup);
    return pg;
 }
-
-#endif
